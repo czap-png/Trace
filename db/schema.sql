@@ -57,4 +57,23 @@ CREATE INDEX idx_sources_entity ON sources(entity_id);
 CREATE INDEX idx_sources_name ON sources(source_name);
 
 ALTER TABLE entities ADD CONSTRAINT unique_type_name UNIQUE (type, canonical_name);
-ALTER TABLE relationships ADD CONSTRAINT unique_relationship UNIQUE (from_entity_id, to_entity_id, relationship_type);
+ALTER TABLE relationships ADD CONSTRAINT unique_relationship UNIQUE (from_entity_
+CREATE EXTENSION IF NOT EXISTS vector;
+
+CREATE TABLE documents (
+    id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    entity_id       UUID REFERENCES entities(id),
+    source_name     TEXT NOT NULL,
+    source_url      TEXT,
+    title           TEXT,
+    content         TEXT NOT NULL,
+    chunk_index     INTEGER NOT NULL DEFAULT 0,
+    embedding       vector(1536),
+    metadata        JSONB NOT NULL DEFAULT '{}',
+    created_at      TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX idx_documents_entity ON documents(entity_id);
+CREATE INDEX idx_documents_embedding ON documents
+    USING ivfflat (embedding vector_cosine_ops)
+    WITH (lists = 100);id, to_entity_id, relationship_type);
