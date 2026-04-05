@@ -1,0 +1,47 @@
+.report {
+  color: #e2e8f0;
+  line-height: 1.8;
+  text-align: left;
+}
+
+.report h1 {
+  font-size: 1.4rem;
+  color: #f1f5f9;
+  border-bottom: 1px solid #334155;
+  padding-bottom: 0.5rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.report h2 {
+  font-size: 1.1rem;
+  color: #94a3b8;
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.report h3 {
+  font-size: 1rem;
+  color: #cbd5e1;
+  margin-top: 1rem;
+  margin-bottom: 0.4rem;
+}
+
+.report p {
+  color: #cbd5e1;
+  margin-bottom: 0.75rem;
+}
+
+.report ul {
+  padding-left: 1.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.report li {
+  color: #cbd5e1;
+  margin-bottom: 0.4rem;
+}
+
+.report strong {
+  color: #f1f5f9;
+}
