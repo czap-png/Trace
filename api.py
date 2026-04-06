@@ -21,7 +21,7 @@ async def verify_api_key(key: str = Security(api_key_header)):
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "https://your-vercel-app.vercel.app"],
+    allow_origins=["http://localhost:5173", "https://trace-gray.vercel.app"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
