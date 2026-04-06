@@ -1,15 +1,27 @@
-from fastapi import FastAPI
+import os
+from fastapi import FastAPI, HTTPException, Security
+from fastapi.security import APIKeyHeader
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from dotenv import load_dotenv
 from agent.investigator import run_investigation
 from agent.tools import get_relationships, search_entities
 
+load_dotenv()
+
 app = FastAPI()
 
-# Allow the React frontend to talk to this server
+API_KEY = os.getenv("TRACE_API_KEY", "")
+api_key_header = APIKeyHeader(name="X-API-Key", auto_error=False)
+
+async def verify_api_key(key: str = Security(api_key_header)):
+    if not API_KEY or key != API_KEY:
+        raise HTTPException(status_code=403, detail="Invalid or missing API key")
+    return key
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=["http://localhost:5173", "https://your-vercel-app.vercel.app"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -19,14 +31,9 @@ class InvestigateRequest(BaseModel):
 
 
 @app.post("/investigate")
-async def investigate(request: InvestigateRequest):
-    """
-    Run a full investigation and return the report and graph data.
-    """
+async def investigate(request: InvestigateRequest, key: str = Security(verify_api_key)):
     report = run_investigation(request.query)
 
-    # Also fetch the graph data — entities and relationships
-    # so the frontend can draw the network diagram
     entities = search_entities(request.query)
     graph_nodes = []
     graph_links = []
@@ -50,7 +57,6 @@ async def investigate(request: InvestigateRequest):
                 "label": rel["relationship_type"]
             })
 
-    # Remove duplicate nodes
     seen = set()
     unique_nodes = []
     for node in graph_nodes:
