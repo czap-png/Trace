@@ -17,9 +17,10 @@ api_key_header = APIKeyHeader(name="X-API-Key", auto_error=False)
 async def verify_api_key(key: str = Security(api_key_header)):
     return key
 
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "https://trace-gray.vercel.app"],
+    allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
