@@ -21,11 +21,10 @@ export default function App() {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/investigate`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
-          "X-API-Key": import.meta.env.VITE_API_KEY
-        },
-        body: JSON.stringify({ query })
-      })
+  "Content-Type": "application/json",
+  "X-API-Key": import.meta.env.VITE_API_KEY,
+  "ngrok-skip-browser-warning": "true"
+},
       const data = await response.json()
       setReport(data.report)
       setGraph(data.graph)
